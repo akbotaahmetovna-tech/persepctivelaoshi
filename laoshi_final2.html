@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Перспективный Лаоши</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=Unbounded:wght@400;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --black:#0a0a0a;
+    --black2:#111111;
+    --black3:#181818;
+    --white:#fafaf8;
+    --gold:#e0b354;
+    --gold2:#c9973c;
+    --blue:#4a9eda;
+    --blue2:#2d7ab5;
+    --red:#c0392b;
+    --border:rgba(224,179,84,0.18);
+    --soft:rgba(224,179,84,0.08);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--black);color:var(--white);font-family:'Inter',sans-serif;overflow-x:hidden}
+
+  /* TOP LINE */
+  .top-line{height:3px;background:linear-gradient(90deg,var(--red),var(--gold),var(--blue),var(--gold),var(--red))}
+
+  /* HERO */
+  .hero{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding:60px 24px 48px;
+    position:relative;
+    overflow:hidden;
+    background:#0a0a0a;
+  }
+
+  /* BIG OUTLINE CHAR */
+  .hero-char{
+    position:absolute;
+    right:-10px;
+    top:50%;
+    transform:translateY(-50%);
+    font-size:320px;
+    font-family:'Playfair Display',serif;
+    font-weight:900;
+    color:transparent;
+    -webkit-text-stroke:1px rgba(74,158,218,0.08);
+    line-height:1;
+    pointer-events:none;
+    user-select:none;
+  }
+
+  /* DRAGON SVG */
+  .dragon-wrap{
+    position:absolute;
+    bottom:40px;
+    right:16px;
+    width:180px;
+    height:180px;
+    opacity:0.06;
+    pointer-events:none;
+  }
+
+  /* FLOATING CHARS */
+  .fc{position:absolute;font-family:'Playfair Display',serif;pointer-events:none;user-select:none;line-height:1}
+  .fc1{top:8%;left:-10px;font-size:80px;color:rgba(224,179,84,0.04)}
+  .fc2{bottom:12%;right:50px;font-size:60px;color:rgba(192,57,43,0.04)}
+
+  /* LANTERNS */
+  .lanterns{position:absolute;top:24px;right:20px;display:flex;gap:14px;opacity:0.25}
+  .ln{display:flex;flex-direction:column;align-items:center;gap:2px}
+  .ln-top{width:10px;height:3px;background:var(--gold);border-radius:2px}
+  .ln-body{width:12px;height:20px;background:var(--red);border-radius:50% 50% 40% 40%}
+  .ln-tail{width:1px;height:8px;background:var(--gold)}
+
+  .hero-tag{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-family:'Unbounded',sans-serif;
+    font-size:9px;
+    letter-spacing:3px;
+    text-transform:uppercase;
+    color:var(--gold);
+    border:1px solid var(--border);
+    padding:8px 16px;
+    border-radius:100px;
+    margin-bottom:32px;
+    width:fit-content;
+    animation:fadeUp 0.8s ease both;
+    background:rgba(224,179,84,0.04);
+  }
+
+  .hero-title{
+    font-family:'Playfair Display',serif;
+    font-size:clamp(52px,13vw,92px);
+    font-weight:900;
+    line-height:1;
+    letter-spacing:-1px;
+    margin-bottom:20px;
+    animation:fadeUp 0.8s 0.1s ease both;
+  }
+  .t-white{color:var(--white)}
+  .t-gold{color:var(--gold);font-style:italic}
+  .t-blue{color:var(--blue)}
+  .t-red{color:var(--red)}
+
+  .hero-subtitle{
+    font-size:15px;
+    font-weight:300;
+    color:rgba(250,250,248,0.55);
+    max-width:300px;
+    line-height:1.7;
+    margin-bottom:48px;
+    animation:fadeUp 0.8s 0.2s ease both;
+  }
+
+  .hero-cta{display:flex;flex-direction:column;gap:12px;animation:fadeUp 0.8s 0.3s ease both}
+
+  .btn-gold{
+    display:flex;align-items:center;justify-content:space-between;
+    background:linear-gradient(135deg,var(--gold2),var(--gold));
+    color:var(--black);
+    text-decoration:none;padding:20px 28px;border-radius:14px;
+    font-family:'Unbounded',sans-serif;font-size:12px;font-weight:700;
+    transition:transform 0.2s,box-shadow 0.2s;cursor:pointer;border:none;width:100%;
+    box-shadow:0 4px 24px rgba(224,179,84,0.2);
+  }
+  .btn-gold:hover{transform:scale(1.02);box-shadow:0 6px 32px rgba(224,179,84,0.35)}
+
+  .btn-tag{
+    background:rgba(74,158,218,0.08);
+    border:1px solid rgba(74,158,218,0.25);
+    color:rgba(250,250,248,0.6);
+    border-radius:12px;padding:14px 20px;
+    font-family:'Unbounded',sans-serif;font-size:10px;text-align:center;letter-spacing:1px;
+  }
+
+  /* DIVIDERS */
+  .divider{
+    height:1px;
+    background:linear-gradient(90deg,transparent,rgba(224,179,84,0.15),rgba(74,158,218,0.15),rgba(224,179,84,0.15),transparent);
+    margin:0 24px;
+    position:relative;
+  }
+  .divider::before{
+    content:'✦';
+    position:absolute;left:50%;top:50%;
+    transform:translate(-50%,-50%);
+    font-size:10px;color:rgba(224,179,84,0.25);
+    background:var(--black);padding:0 8px;
+  }
+
+  /* SECTIONS */
+  .section{padding:52px 24px}
+
+  .section-label{
+    font-family:'Unbounded',sans-serif;font-size:9px;letter-spacing:4px;
+    text-transform:uppercase;color:var(--gold);margin-bottom:24px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .section-label::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(224,179,84,0.2),transparent)}
+
+  /* AUTHOR */
+  .author-card{
+    background:var(--black2);
+    border:1px solid var(--border);
+    border-radius:20px;padding:28px;
+    position:relative;overflow:hidden;
+  }
+  .author-card::after{
+    content:'';position:absolute;top:0;left:0;right:0;height:2px;
+    background:linear-gradient(90deg,var(--red),var(--gold),var(--blue));
+    border-radius:20px 20px 0 0;
+  }
+  .author-card-bg{
+    position:absolute;right:-10px;bottom:-20px;
+    font-size:120px;font-family:'Playfair Display',serif;
+    color:rgba(74,158,218,0.04);line-height:1;pointer-events:none;user-select:none;
+  }
+
+  .author-name{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;line-height:1.2;margin-bottom:8px}
+  .author-ttl{font-size:11px;color:var(--gold);font-weight:400;letter-spacing:0.3px;margin-bottom:20px;line-height:1.7;opacity:0.85}
+  .author-facts{display:flex;flex-direction:column;gap:12px}
+  .fact{display:flex;align-items:flex-start;gap:12px;font-size:13px;color:rgba(250,250,248,0.72);line-height:1.5}
+  .fact-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+
+  /* FOR WHOM */
+  .whom-grid{display:flex;flex-direction:column;gap:10px}
+  .whom-card{
+    background:var(--black2);border:1px solid rgba(255,255,255,0.05);
+    border-radius:16px;padding:22px;display:flex;align-items:center;gap:18px;
+    transition:border-color 0.3s,transform 0.2s;position:relative;overflow:hidden;
+  }
+  .whom-card::before{
+    content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+    background:linear-gradient(180deg,var(--blue),var(--gold));border-radius:3px 0 0 3px;
+  }
+  .whom-card:hover{border-color:var(--border);transform:translateX(4px)}
+  .whom-num{font-family:'Playfair Display',serif;font-size:42px;font-weight:900;color:rgba(74,158,218,0.12);line-height:1;flex-shrink:0;width:44px}
+  .whom-text h3{font-family:'Unbounded',sans-serif;font-size:11px;font-weight:700;margin-bottom:5px}
+  .whom-text p{font-size:12px;color:rgba(250,250,248,0.48);line-height:1.6}
+
+  /* PROGRAM */
+  .prog-list{display:flex;flex-direction:column}
+  .module{border-bottom:1px solid rgba(255,255,255,0.05);padding:18px 0;transition:padding-left 0.2s}
+  .module:last-child{border-bottom:none}
+  .module:hover{padding-left:6px}
+  .module-hdr{display:flex;align-items:center;gap:14px;margin-bottom:6px}
+  .module-num{
+    font-family:'Unbounded',sans-serif;font-size:9px;color:var(--blue);font-weight:700;
+    width:22px;flex-shrink:0;background:rgba(74,158,218,0.08);border-radius:4px;padding:3px 4px;text-align:center;
+  }
+  .module-title{font-family:'Playfair Display',serif;font-size:17px;font-weight:700}
+  .module-desc{padding-left:36px;font-size:12px;color:rgba(250,250,248,0.42);line-height:1.7}
+
+  /* PRICE */
+  .price-block{
+    background:var(--black2);
+    border:1px solid var(--border);
+    border-radius:24px;padding:36px 24px;text-align:center;
+    position:relative;overflow:hidden;
+  }
+  .price-block::after{
+    content:'';position:absolute;top:0;left:0;right:0;height:2px;
+    background:linear-gradient(90deg,var(--gold),var(--red),var(--blue),var(--gold));
+  }
+  .price-block-bg{
+    position:absolute;right:-20px;bottom:-20px;
+    font-size:160px;font-family:'Playfair Display',serif;
+    color:rgba(224,179,84,0.025);line-height:1;pointer-events:none;user-select:none;
+  }
+
+  .price-label{font-family:'Unbounded',sans-serif;font-size:9px;color:rgba(250,250,248,0.4);margin-bottom:8px;text-transform:uppercase;letter-spacing:2px}
+  .price-amount{font-family:'Playfair Display',serif;font-size:54px;font-weight:900;color:var(--white);line-height:1;margin-bottom:4px}
+  .price-cur{font-size:22px;color:var(--gold)}
+  .price-desc{font-size:12px;color:rgba(250,250,248,0.4);margin-bottom:24px;line-height:1.6}
+
+  .includes{text-align:left;margin-bottom:24px;display:flex;flex-direction:column;gap:10px}
+  .inc-item{display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(250,250,248,0.8)}
+  .inc-dot{width:6px;height:6px;background:var(--gold);border-radius:50%;flex-shrink:0}
+
+  .after-box{
+    background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);
+    border-radius:14px;padding:20px;margin-bottom:20px;text-align:left;
+  }
+  .after-box h4{font-family:'Unbounded',sans-serif;font-size:9px;color:var(--gold);letter-spacing:1px;margin-bottom:12px;text-transform:uppercase}
+  .a-step{display:flex;align-items:flex-start;gap:10px;font-size:12px;color:rgba(250,250,248,0.72);line-height:1.6;margin-bottom:8px}
+  .a-step:last-child{margin-bottom:0}
+  .a-num{
+    background:linear-gradient(135deg,var(--red),var(--gold2));
+    color:var(--white);font-family:'Unbounded',sans-serif;font-size:9px;font-weight:700;
+    width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;
+  }
+
+  .btn-buy{
+    display:flex;align-items:center;justify-content:center;gap:10px;
+    background:linear-gradient(135deg,var(--gold2),var(--gold));
+    color:var(--black);text-decoration:none;padding:22px 32px;border-radius:14px;
+    font-family:'Unbounded',sans-serif;font-size:13px;font-weight:700;
+    width:100%;transition:transform 0.2s,box-shadow 0.2s;cursor:pointer;border:none;
+    margin-bottom:14px;box-shadow:0 4px 24px rgba(224,179,84,0.2);
+  }
+  .btn-buy:hover{transform:scale(1.02);box-shadow:0 6px 32px rgba(224,179,84,0.38)}
+
+  .inst-box{
+    background:rgba(192,57,43,0.07);border:1px solid rgba(192,57,43,0.2);
+    border-radius:12px;padding:16px;margin-bottom:12px;text-align:left;
+  }
+  .inst-box h5{font-family:'Unbounded',sans-serif;font-size:9px;color:var(--red);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+  .inst-box p{font-size:12px;color:rgba(250,250,248,0.68);line-height:1.6}
+
+  .intl-box{
+    background:rgba(74,158,218,0.06);border:1px solid rgba(74,158,218,0.18);
+    border-radius:12px;padding:16px;text-align:left;
+  }
+  .intl-box h5{font-family:'Unbounded',sans-serif;font-size:9px;color:var(--blue);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+  .intl-box p{font-size:12px;color:rgba(250,250,248,0.68);line-height:1.6}
+  .intl-box a{color:var(--blue);text-decoration:none;font-weight:600}
+
+  /* CONTACTS */
+  .contacts-grid{display:grid;grid-template-columns:1fr;gap:12px}
+  .contact-btn{
+    display:flex;align-items:center;gap:14px;padding:18px 20px;
+    border-radius:14px;border:1px solid rgba(255,255,255,0.07);
+    background:var(--black2);color:var(--white);text-decoration:none;font-size:13px;
+    transition:border-color 0.3s,transform 0.2s;
+  }
+  .contact-btn:hover{border-color:var(--gold);transform:translateY(-2px)}
+  .contact-icon{font-size:22px}
+
+  footer{
+    padding:32px 24px 56px;text-align:center;
+    font-size:10px;color:rgba(250,250,248,0.15);
+    font-family:'Unbounded',sans-serif;letter-spacing:1px;
+  }
+  footer::before{
+    content:'龍  凤  福';display:block;
+    font-size:18px;color:rgba(224,179,84,0.08);margin-bottom:12px;letter-spacing:12px;
+  }
+
+  /* STICKY */
+  .sticky-cta{
+    position:fixed;bottom:20px;left:24px;right:24px;z-index:100;
+    display:flex;align-items:center;justify-content:space-between;
+    background:linear-gradient(135deg,#8b0000,var(--red));
+    color:var(--white);padding:18px 24px;border-radius:14px;
+    font-family:'Unbounded',sans-serif;font-size:11px;font-weight:700;
+    text-decoration:none;box-shadow:0 8px 32px rgba(192,57,43,0.35);
+    transform:translateY(80px);transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    cursor:pointer;border:1px solid rgba(224,179,84,0.2);
+  }
+  .sticky-cta.show{transform:translateY(0)}
+  .sticky-price{color:var(--gold);font-size:12px}
+
+  @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+  .fade-in{opacity:0;transform:translateY(20px);transition:opacity 0.6s ease,transform 0.6s ease}
+  .fade-in.visible{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+
+<div class="top-line"></div>
+
+<section class="hero">
+  <div class="lanterns">
+    <div class="ln"><div class="ln-top"></div><div class="ln-body"></div><div class="ln-tail"></div></div>
+    <div class="ln"><div class="ln-top"></div><div class="ln-body"></div><div class="ln-tail"></div></div>
+  </div>
+
+  <div class="fc fc1">教</div>
+  <div class="fc fc2">学</div>
+  <div class="hero-char">师</div>
+
+  <svg class="dragon-wrap" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M20,100 Q40,60 80,80 Q100,90 120,70 Q150,45 180,60 Q170,80 150,85 Q130,90 120,110 Q110,130 90,125 Q60,118 40,140 Q25,155 20,140 Q15,120 20,100Z" fill="rgba(74,158,218,0.8)"/>
+    <circle cx="175" cy="55" r="8" fill="rgba(224,179,84,1)"/>
+    <path d="M175,47 Q185,40 190,50" stroke="rgba(224,179,84,0.8)" stroke-width="2" fill="none"/>
+    <path d="M175,63 Q185,70 190,60" stroke="rgba(224,179,84,0.8)" stroke-width="2" fill="none"/>
+    <path d="M80,80 Q75,65 85,55" stroke="rgba(192,57,43,0.7)" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M120,70 Q115,52 128,45" stroke="rgba(192,57,43,0.7)" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <circle cx="182" cy="52" r="3" fill="rgba(192,57,43,1)"/>
+    <path d="M40,140 Q30,160 45,170 Q35,155 50,148" fill="rgba(74,158,218,0.5)"/>
+  </svg>
+
+  <span class="hero-tag">🇨🇳 Курс для преподавателей китайского</span>
+
+  <h1 class="hero-title">
+    <span class="t-white">Перспективный </span><br>
+    <span class="t-gold">лао</span><span class="t-blue">шы</span>
+  </h1>
+
+  <p class="hero-subtitle">Возьмите методику под контроль и станьте профессионалом нового уровня</p>
+
+  <div class="hero-cta">
+    <a href="#price" class="btn-gold">Купить курс <span>→</span></a>
+    <div class="btn-tag">Полный доступ на 1 год · 99 990 ₸</div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section class="section fade-in">
+  <div class="section-label">Об авторе</div>
+  <div class="author-card">
+    <div class="author-card-bg">师</div>
+    <div class="author-name">Акбота Ахметовна</div>
+    <div class="author-ttl">Магистр преподавания китайского как иностранного · Старший лектор университета MNU (КАЗГЮУ) · Исследователь и PhD-кандидат в области психологии развития и образования (Tianjin Normal University, Китай)</div>
+    <div class="author-facts">
+      <div class="fact"><span class="fact-icon">🎓</span><span>Образование: бакалавр и магистр Ланьчжоуского университета (Китай) по направлению «Международное преподавание китайского языка»</span></div>
+      <div class="fact"><span class="fact-icon">📚</span><span>Профессия: преподаватель китайского языка и культуры, методист</span></div>
+      <div class="fact"><span class="fact-icon">⏱</span><span>Опыт преподавания: более 8 лет работы с университетскими студентами, корпоративными клиентами и индивидуальными учениками</span></div>
+      <div class="fact"><span class="fact-icon">🔬</span><span>Научные интересы: методика преподавания китайского как иностранного, мотивация студентов и межкультурная адаптация</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section class="section fade-in">
+  <div class="section-label">Кому подойдёт</div>
+  <div class="whom-grid">
+    <div class="whom-card"><div class="whom-num">01</div><div class="whom-text"><h3>Новичкам</h3><p>Получите систему, методику и поддержку, чтобы уверенно стартовать в преподавании китайского</p></div></div>
+    <div class="whom-card"><div class="whom-num">02</div><div class="whom-text"><h3>Практикующим преподавателям</h3><p>Узнаете новые методики, соберёте готовый инструментарий и повысите эффективность своих уроков</p></div></div>
+    <div class="whom-card"><div class="whom-num">03</div><div class="whom-text"><h3>Для школ и центров</h3><p>Систематизируете обучение, повысите квалификацию команды и улучшите результаты студентов</p></div></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section class="section fade-in">
+  <div class="section-label">Программа курса</div>
+  <div class="prog-list">
+    <div class="module"><div class="module-hdr"><span class="module-num">01</span><h3 class="module-title">Вводный урок</h3></div><p class="module-desc">Продающий урок · Портрет студента · Определение уровня и целей</p></div>
+    <div class="module"><div class="module-hdr"><span class="module-num">02</span><h3 class="module-title">Планирование</h3></div><p class="module-desc">Долгосрочное и поурочное планирование · Метод ППП · Метод сторителлинга</p></div>
+    <div class="module"><div class="module-hdr"><span class="module-num">03</span><h3 class="module-title">Современные методики</h3></div><p class="module-desc">ГПМ · Коммуникативный метод · PBL · TBL</p></div>
+    <div class="module"><div class="module-hdr"><span class="module-num">04</span><h3 class="module-title">Навыки</h3></div><p class="module-desc">Фонетика · 7 методов обучения иероглифике · Чтение, письмо, аудирование, говорение</p></div>
+    <div class="module"><div class="module-hdr"><span class="module-num">05</span><h3 class="module-title">Материалы и уроки</h3></div><p class="module-desc">Виды упражнений по Пассову · Метод свободного урока</p></div>
+    <div class="module"><div class="module-hdr"><span class="module-num">06</span><h3 class="module-title">Психология студентов</h3></div><p class="module-desc">Психотипы студентов · Работа с ошибками · Приёмы мотивации · Закон Додсона</p></div>
+    <div class="module"><div class="module-hdr"><span class="module-num">07</span><h3 class="module-title">Карьерный блок</h3></div><p class="module-desc">Самозанятость и налоги · Продвижение и личный бренд</p></div>
+    <div class="module"><div class="module-hdr"><span class="module-num">🎁</span><h3 class="module-title">Бонус</h3></div><p class="module-desc">Мини-консультация с автором по итогам курса · Доступ в закрытый Telegram-канал с материалами и шаблонами</p></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section class="section fade-in" id="price">
+  <div class="section-label">Стоимость</div>
+  <div class="price-block">
+    <div class="price-block-bg">福</div>
+    <div class="price-label">Доступ на 1 год</div>
+    <div class="price-amount">99 990 <span class="price-cur">₸</span></div>
+    <div class="price-desc">Полный доступ ко всем материалам курса на 1 год</div>
+    <div class="includes">
+      <div class="inc-item"><span class="inc-dot"></span>7 модулей + бонусный блок</div>
+      <div class="inc-item"><span class="inc-dot"></span>Мини-консультация с автором</div>
+      <div class="inc-item"><span class="inc-dot"></span>Закрытый Telegram-канал с материалами</div>
+      <div class="inc-item"><span class="inc-dot"></span>Шаблоны и готовые инструменты</div>
+      <div class="inc-item"><span class="inc-dot"></span>Доступ на 1 год</div>
+    </div>
+    <div class="after-box">
+      <h4>После оплаты:</h4>
+      <div class="a-step"><span class="a-num">1</span><span>Оплатите курс по кнопке ниже через Kaspi Pay</span></div>
+      <div class="a-step"><span class="a-num">2</span><span>Сделайте скриншот чека об оплате</span></div>
+      <div class="a-step"><span class="a-num">3</span><span>Отправьте чек и вашу почту (email) на WhatsApp: <strong>+7 747 409 90 34</strong></span></div>
+      <div class="a-step"><span class="a-num">4</span><span>Получите доступ к курсу в течение нескольких часов</span></div>
+    </div>
+    <a href="https://pay.kaspi.kz/pay/gqmye2re" class="btn-buy">Оплатить через Kaspi →</a>
+    <div class="inst-box">
+      <h5>🔴 Рассрочка 0-0-12 от Kaspi</h5>
+      <p>Оплатите в 12 равных платежей без переплат и комиссий — прямо через Kaspi Pay</p>
+    </div>
+    <div class="intl-box">
+      <h5>🌍 Из другой страны?</h5>
+      <p>Если вы находитесь за пределами Казахстана — напишите на WhatsApp и я отправлю реквизиты для оплаты: <a href="https://wa.me/87474099034">+7 747 409 90 34</a></p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section class="section fade-in">
+  <div class="section-label">Связаться</div>
+  <div class="contacts-grid">
+    <a href="https://wa.me/87474099034" class="contact-btn">
+      <span class="contact-icon">💬</span>
+      <div><div style="font-weight:600">WhatsApp</div><div style="font-size:11px;opacity:0.5;margin-top:2px">+7 747 409 90 34</div></div>
+    </a>
+    <a href="https://www.instagram.com/akbotaahmetovna" class="contact-btn">
+      <span class="contact-icon">📸</span>
+      <div><div style="font-weight:600">Instagram</div><div style="font-size:11px;opacity:0.5;margin-top:2px">@akbotaahmetovna</div></div>
+    </a>
+  </div>
+</section>
+
+<footer>© 2025 · Акбота Ахметовна · perspectivelaoshi</footer>
+
+<a href="https://pay.kaspi.kz/pay/gqmye2re" class="sticky-cta" id="stickyCta">
+  <span>🐉 Купить курс</span>
+  <span class="sticky-price">99 990 ₸ →</span>
+</a>
+
+<script>
+  const observer=new IntersectionObserver((e)=>{e.forEach(el=>{if(el.isIntersecting)el.target.classList.add('visible')})},{threshold:0.1});
+  document.querySelectorAll('.fade-in').forEach(el=>observer.observe(el));
+  const cta=document.getElementById('stickyCta');
+  window.addEventListener('scroll',()=>{cta.classList.toggle('show',window.scrollY>400)});
+</script>
+</body>
+</html>
